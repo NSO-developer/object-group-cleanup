@@ -25,7 +25,6 @@ create a session with NSO
 - sort that structure
 
 ### Project Team Members
-<br />
 Divyani Rao <br  />
 Alyssa Sandore <br />
 Rob Gonzalez
