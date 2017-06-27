@@ -3,13 +3,39 @@
 import ncs
 import socket
 
-with ncs.maapi.Maapi() as m:
-       with ncs.maapi.Session(m, 'admin', 'python', ['ncsadmin'], src_ip='127.0.0.1', src_port=0, proto=ncs.PROTO_TCP, vendor=None, product=None, version=None, client_id=None):
-           root = ncs.maagic.get_root(m)
-           for box in (root.devices.device):                                                       #iterate through devices
-               print (device.name, ": ", device.platform.model)
-               for obj in root.devices.device[box.name].config._object-group:                       #iterate through object list
-                   for acl in root.devices.device[box.name].config.ip.access_list.extended.ext_named_acl:  #look in access list
-                        print (acl.name)
-                        if obj not in acl:
-                            del obj
+def flag_ogs_in_box(box):
+    """
+    This function returns a list of object groups that are orphaned in that device.
+    """
+    orphaned_og = []
+    with ncs.maapi.single_write_trans('admin','python') as t:
+        root = ncs.maapi.get_root(t)
+        for og in root.devices.device[box].config.object-group:
+            if (!find_in_ACLS(box,og,root)):
+                orphaned_og.append(str(og))
+    return orphaned_og
+
+def find_in_ACLS(box, og, root):
+    """
+    Function will iterate through the ACL's within device and return true if found (keep)
+    and false if not found (remove)
+    """
+    flag = false
+
+    for acl in root.devices.device[box].config.access_list.extended:
+        flag = find_rule_in_ACL(box, og, root, acl)
+
+        if flag == true:
+            break
+
+        return flag            #return true if found, false if not
+
+def find_rule_in_ACL (box, og, root, ACL):
+    """
+    This funcion will iterate through the rules in the ACL to find matches of the given OG. Returns boolean
+    values
+    """
+    for rule in root.devices.device[box].config.access_list[ACL]:
+        if og in rule:
+            return true         #return true for continuous iteration
+    return false                #return false for flagging for removal
