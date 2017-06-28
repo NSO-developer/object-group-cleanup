@@ -10,7 +10,8 @@ def find_rule_in_ACL (box, og, root, ACL):
     """
     for rul in root.devices.device[box].config.asa__access_list.access_list_id[ACL.id].rule:
         #print rul.id
-        if og in root.devices.device[box].config.asa__access_list.access_list_id[ACL.id].rule[rul.id]:
+        if og in rul.id:
+            #print og
             return True         #return true for continuous iteration
     return False                #return false for flagging for removal
 
@@ -22,7 +23,7 @@ def find_in_ACLS(box, og, root):
     flag = False
     #/ ncs:devices / device { svl-gem-joe-asa-fw1.cisco.com } / config / asa:access-list / access-list-id { jw_apt }
     for acl in root.devices.device[box].config.asa__access_list.access_list_id:
-        print acl.id
+        #print acl.id
         flag = find_rule_in_ACL(box, og, root, acl)
         if flag:
             break
@@ -38,7 +39,7 @@ def flag_ogs_in_box(box):
         root = ncs.maagic.get_root(t)
         grp = root.devices.device[box].config.asa__object_group
         for ogtyp in grp:
-            for og in root.devices.device[box].config.asa__object_group['asa:service']:
+            for og in root.devices.device[box].config.asa__object_group[ogtyp]:
                 if not find_in_ACLS(box,og.id,root):
                     #print og.id
                     orphaned_og.append(og.id)
