@@ -11,7 +11,7 @@ build:
     - cp -r Object_group_cleaner /var/opt/ncs/packages
     - cd /var/opt/ncs/packages/Object_group_cleaner/src
     - make
-    - python /var/opt/ncs/packages/Object_group_cleaner/python/ubvpn/test_deploy.py
+    - python /var/opt/ncs/packages/Object_group_cleaner/python/test-deploy.py
 test:
   stage: test
   script:
