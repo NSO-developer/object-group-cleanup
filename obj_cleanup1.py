@@ -73,11 +73,11 @@ def flag_ogs_in_box(box):
     orphaned_og = []
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
-        #for ogtyp in root.devices.device[box].config.asa__object_group:
-        for og in root.devices.device[box].config.asa__object_group['asa:network']:
-            if not find_in_ACLS(box,og.id,root):
+        for ogtyp in root.devices.device[box].config.asa__object_group:
+            for og in root.devices.device[box].config.asa__object_group[ogtyp]:
+                if not find_in_ACLS(box,og.id,root):
                     #print og.id
-                orphaned_og.append(og.id)
+                    orphaned_og.append(og.id)
         return orphaned_og
 
 if __name__ == "__main__":
