@@ -1,0 +1,76 @@
+
+
+module input_output {
+  namespace "http://example.com/input_output";
+  prefix input_output;
+
+  import tailf-common {
+    prefix tailf;
+  }
+
+
+  grouping output {
+      leaf start_time { type string; }
+      leaf end_time { type string; }
+      leaf run_time { type string; }
+      list orphaned_object_groups {
+        leaf device { type string; }
+        leaf og_type { type string; }
+        leaf object_group { type string; }
+      }
+      leaf csv { type string; }
+  }
+
+  grouping input {
+    list inputs {
+      tailf:info "Input values for the action";
+      leaf input_type {
+        type enumeration {
+          enum "device_group";
+          enum "device";
+          enum "csv";
+        }
+      }
+      leaf value { type string; }
+    }
+  }
+
+  grouping input_output {
+  tailf:action search {
+    tailf:actionpoint Object_group_cleaner;
+    tailf:info "Find orphaned object groups";
+    input {
+      uses input;
+    }
+    output {
+      uses output;
+      }
+    }
+
+
+  tailf:action remove {
+    tailf:actionpoint Object_group_cleaner;
+    tailf:info "Remove orphaned object groups";
+    input {
+      leaf csv { type string; }
+      list inputs {
+        tailf:info "Input values for remove";
+        leaf device_name { type string; }
+        leaf og_type {
+          type enumeration {
+            enum "service";
+            enum "network";
+            enum "otherone";
+            enum "otherone";
+          }
+        }
+        leaf og_name {type string;}
+
+      }
+    }
+    output {
+      uses output;
+      }
+   }
+ }
+ }
