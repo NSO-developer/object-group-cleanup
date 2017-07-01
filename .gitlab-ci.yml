@@ -8,7 +8,7 @@ build:
     - rm -rf /var/opt/ncs/packages/Object_group_cleaner
     - mkdir /var/opt/ncs/packages/Object_group_cleaner
     - ls
-    - cp -r ../Object_group_cleaner /var/opt/ncs/packages
+    - cp -r Object_group_cleaner /var/opt/ncs/packages
     - cd /var/opt/ncs/packages/Object_group_cleaner/src
     - make
     - python /var/opt/ncs/packages/Object_group_cleaner/python/ubvpn/test_deploy.py
