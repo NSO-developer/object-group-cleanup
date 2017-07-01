@@ -2,9 +2,6 @@
 
 import ncs
 import socket
-import threading
-import Queue
-
 #/ ncs:devices / device { svl-gem-joe-asa-fw1.cisco.com } / config / asa:access-list / access-list-id { gem_ft_apt }
 def find_rule_in_ACL (box, og, root, ACL):
     """
@@ -15,12 +12,8 @@ def find_rule_in_ACL (box, og, root, ACL):
         #print rul.id
         if og in rul.id:
             #print og
-            #return True
-            q.put(True)
-            return         #return true for continuous iteration
-    q.put(False)
-    return
-    #return False               #return false for flagging for removal
+            return True         #return true for continuous iteration
+    return False                #return false for flagging for removal
 
 def find_in_ACLS(box, og, root):
     """
@@ -30,17 +23,11 @@ def find_in_ACLS(box, og, root):
     flag = False
     #/ ncs:devices / device { svl-gem-joe-asa-fw1.cisco.com } / config / asa:access-list / access-list-id { jw_apt }
     for acl in root.devices.device[box].config.asa__access_list.access_list_id:
-        t = Thread(target=find_rule_in_ACL, args=(box, og, root, acl,))
-        t.start()
-    while True not in q.Queue
-        if threading.activeCount() == 0 and True not in q.Queue
-            return False
-    return True
         #print acl.id
-        #flag = find_rule_in_ACL(box, og, root, acl)
-        #if flag:
-            #break
-    r#eturn flag            #return true if found, false if not
+        flag = find_rule_in_ACL(box, og, root, acl)
+        if flag:
+            break
+    return flag            #return true if found, false if not
 
 def flag_ogs_in_box(box):
     """
@@ -50,13 +37,12 @@ def flag_ogs_in_box(box):
     orphaned_og = []
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
-        for ogtyp in root.devices.device[box].config.asa__object_group:
-            for og in root.devices.device[box].config.asa__object_group[ogtyp]:
-                if not find_in_ACLS(box,og.id,root):
+        #for ogtyp in root.devices.device[box].config.asa__object_group:
+        for og in root.devices.device[box].config.asa__object_group['asa:service']:
+            if not find_in_ACLS(box,og.id,root):
                     #print og.id
-                    orphaned_og.append(og.id)
+                orphaned_og.append(og.id)
     return orphaned_og
 
 if __name__ == "__main__":
-    q = Queue.Queue()
     print flag_ogs_in_box('svl-gem-joe-asa-fw1.cisco.com')
