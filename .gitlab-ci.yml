@@ -7,6 +7,7 @@ build:
     # replace the package dir names for new packages. In this case replace /nso-ubvpn and /ubvpn
     - rm -rf /var/opt/ncs/packages/Object_group_cleaner
     - mkdir /var/opt/ncs/packages/Object_group_cleaner
+    - ls
     - cp -r ../Object_group_cleaner /var/opt/ncs/packages
     - cd /var/opt/ncs/packages/Object_group_cleaner/src
     - make
