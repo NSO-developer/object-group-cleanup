@@ -61,7 +61,7 @@ module input_output {
             enum "service";
             enum "network";
             enum "otherone";
-            enum "otherone";
+            enum "otherone2";
           }
         }
         leaf og_name {type string;}
