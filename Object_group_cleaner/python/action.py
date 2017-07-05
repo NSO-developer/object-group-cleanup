@@ -47,15 +47,15 @@ class ActionHandler(Action):
         output.start_time = time.strftime("%H:%M:%S")
         if name == "search":
             #devices = helpers.build_device_list(input)
-            devices = ['svl-gem-joe-asa-fw1.cisco.com']
-            for device in devices:
-                og_for_removal = flag_ogs_in_box_test2(device)
-                #og_for_removal = mock()
-                for og in og_for_removal:
-                    result = output.orphaned_object_groups.create()
-                    result.object_group = og["og"]
-                    result.og_type = og["og_type"]
-                    result.device = device
+            device = ['svl-gem-joe-asa-fw1.cisco.com']
+            #for device in devices:
+            #og_for_removal = flag_ogs_in_box_test2(device)
+            og_for_removal = mock()
+            for og in og_for_removal:
+                result = output.orphaned_object_groups.create()
+                result.object_group = og["og"]
+                result.og_type = og["og_type"]
+                result.device = device
 
         elif name == "remove":
             pass # add remove function and remove pass statement
