@@ -48,7 +48,7 @@ module input_output {
     }
 
 
-  tailf:action remove_test {
+  tailf:action remove {
     tailf:actionpoint Object_group_cleaner;
     tailf:info "Remove orphaned object groups";
     input {
