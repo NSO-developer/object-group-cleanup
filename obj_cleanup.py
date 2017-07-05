@@ -106,7 +106,7 @@ def flag_ogs_in_box_test(box):
             thread = executor.submit(banish, og, banishment, acl)
             futures.append(thread)
     concurrent.futures.wait(futures)
-    print list(set(banishment))
+    return list(set(banishment))
 
 def banish(og, banishment, acl):
     """
@@ -142,8 +142,15 @@ def flag_ogs_in_box_test2(box):
     if not banishment:
         no_ogs_error(box)
     else:
-        print list(set(banishment))
+        return list(set(banishment))
 
+def print_ogs_to_remove(box):
+    """ This function prints the object groups to be removed before removing.
+    """
+    og_list = flag_ogs_in_box_test2(box)
+    print "Devices to be removed in: ",box,"\n"
+    for og in og_list:
+        print og
 
 def no_ogs_error(box):
     """
@@ -156,7 +163,7 @@ if __name__ == "__main__":
     This is calling two functions and checking how much time it takes to run them.
     """
     b = time.time()
-    flag_ogs_in_box_test2('svl-gem-joe-asa-fw1.cisco.com')
+    print print_ogs_to_remove('svl-gem-joe-asa-fw1.cisco.com')
     af = time.time()
     print af-b
 
