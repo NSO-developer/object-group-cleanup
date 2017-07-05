@@ -1,0 +1,14 @@
+
+module Object_group_cleaner {
+  namespace "http://example.com/tools";
+  prefix tools;
+
+  import tailf-common { prefix tailf; }
+  import input_output { prefix input_output; }
+
+  description "Module to store the Object Group Cleaner";
+
+  container Object_group_cleaner {
+    uses input_output:input_output;
+  }
+}
