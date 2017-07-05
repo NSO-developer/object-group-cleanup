@@ -46,13 +46,14 @@ class ActionHandler(Action):
         start = (datetime.strptime(str(datetime.now().time()), DATE_FORMAT))
         output.start_time = time.strftime("%H:%M:%S")
         if name == "search":
-            devices = helpers.build_device_list(input)
+            #devices = helpers.build_device_list(input)
+            devices = ['svl-gem-joe-asa-fw1.cisco.com']
             for device in devices:
-                #og_for_removal = obj_cleanup.flag_ogs_in_box(device)
+                #og_for_removal = flag_ogs_in_box_test2(device)
                 og_for_removal = mock()
                 for og in og_for_removal:
                     result = output.orphaned_object_groups.create()
-                    result.object_group = og["og"]
+                    #result.object_group = og["og"]
                     result.og_type = og["og_type"]
                     result.device = device
 
@@ -93,3 +94,30 @@ def mock():
 This is a mock function that returns a dictionary (or use a two dimensional list that has the og type
 and the og name). Use this function instead of our algorithm to perfect input and output on the web UI
 """
+    mock_og = {}
+    mock_og["icmp-type"] = []
+    mock_og["network"] = ['GEM-OG:voip_hong_kong_ucce_tftp',
+            'HOST:alli-prd-29.cisco.com',
+            'gem_og_itst_prd_ports',
+            'GHOST:nqs-hkg-h01-p.cisco.com',
+            'HOST:rcdn-core2.cisco.com',
+            'HOST:nqs-sjc-h06-p.cisco.com',
+            'HOST:nqs-sjc-h06-p.cisco.com',
+            'GEM-OG:tacacs',
+            'common_host_1',
+            'HOST:mfgtde-dev.cisco.com',
+            'HOST:ees-singapore.cisco.com',
+            'eman_networks-global-1']
+    mock_og["service"] = ['GEM-OG:bts-view_servers',
+            'HOST:wwwin-sso-prod3.cisco.com',
+            'HOST:mail-aln.cisco.com',
+            'HOST:alli-prd-27.cisco.com',
+            'HOST:nqs-blr-h01-p.cisco.com',
+            'HOST:sj5autotrack.cisco.com',
+            'NDCS-OG:dmz_networks-sjc-1',
+            'GEM-OG:intellectual_property',
+            'GEM-OG:voip_rtp_campus_cucm',
+            'gem_og_itst_prd_ports']
+    mock_og["user"] = []
+
+    return mock_og
