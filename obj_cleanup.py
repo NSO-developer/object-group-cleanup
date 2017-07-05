@@ -5,7 +5,6 @@ import Queue
 import time
 import concurrent.futures
 
-#/ ncs:devices / device { svl-gem-joe-asa-fw1.cisco.com } / config / asa:access-list / access-list-id { gem_ft_apt }
 def find_rule_in_ACL (box, og, root, rul, q):
     """
     This funcion will iterate through the rules in the ACL to find matches of the given OG. Returns boolean
@@ -15,7 +14,7 @@ def find_rule_in_ACL (box, og, root, rul, q):
         #for rul in root.devices.device[box].config.asa__access_list.access_list_id[ACL.id].rule:
             #print rul.id
     if og in rul.id:
-        print og
+        #print og
         #return True
         q.append(True)
         return True
@@ -57,7 +56,6 @@ def flag_ogs_in_box(box):
     """
     This function returns a list of object groups that are orphaned in that device.
     """
-    #og_type = ['icmp_type','network','service','user']
     orphaned_og = []
     threads = []
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
@@ -76,7 +74,11 @@ def flag_ogs_in_box(box):
                     #print og.id
                     #orphaned_og.append(og.id)
     return orphaned_og
+
 def flag_ogs_in_box_test(box):
+    """
+    This function uses threads to find the the object groups that need to be removed.
+    """
     orphaned_og = []
     og_list = []
     acl_list = []
@@ -107,7 +109,9 @@ def flag_ogs_in_box_test(box):
     print list(set(banishment))
 
 def banish(og, banishment, acl):
-    #print "thread is running"
+    """
+    This function appends a object group to a list (banishment) if it is not found in an ACL rule. This function runs on threads.
+    """
     for rule in acl:
         if og in rule:
             break
@@ -115,6 +119,9 @@ def banish(og, banishment, acl):
             banishment.append(og)
 
 def flag_ogs_in_box_test2(box):
+    """
+    This function finds the object groups that need to be removed for a device (without using threads). It finds this by using set difference of the set of rules and the set of object groups.
+    """
     orphaned_og = []
     og_list = []
     banishment = []
@@ -132,9 +139,22 @@ def flag_ogs_in_box_test2(box):
     rul_list = set(rul_list)
     for og in og_list.difference(rul_list):
         banishment.append(og)
-    print list(set(banishment))
+    if not banishment:
+        no_ogs_error(box)
+    else:
+        print list(set(banishment))
+
+
+def no_ogs_error(box):
+    """
+    This function prints an error message if there are no object groups to be removed for a device.
+    """
+    print "Error: There are no object groups that need to be removed for device ",box,"."
 
 if __name__ == "__main__":
+    """
+    This is calling two functions and checking how much time it takes to run them.
+    """
     b = time.time()
     flag_ogs_in_box_test2('svl-gem-joe-asa-fw1.cisco.com')
     af = time.time()
