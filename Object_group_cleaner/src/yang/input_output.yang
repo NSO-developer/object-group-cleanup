@@ -60,8 +60,8 @@ module input_output {
           type enumeration {
             enum "service";
             enum "network";
-            enum "otherone";
-            enum "otherone2";
+            enum "icmp-type";
+            enum "user";
           }
         }
         leaf og_name {type string;}
