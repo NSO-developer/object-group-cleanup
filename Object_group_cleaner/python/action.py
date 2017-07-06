@@ -20,7 +20,7 @@ from ncs.dp import Action
 from ncs.application import Application
 from _namespaces.Object_group_cleaner_ns import ns
 import helpers
-#import obj_cleanup #make sure to put this in the python folder
+import obj_cleanup #make sure to put this in the python folder
 
 DATE_FORMAT = "%H:%M:%S.%f"
 
@@ -51,8 +51,8 @@ class ActionHandler(Action):
             devices = helpers.build_device_list(input)
             #device = 'svl-gem-joe-asa-fw1.cisco.com'
             for device in devices:
-            #og_for_removal = flag_ogs_in_box_test2(device)
-                og_for_removal = mock()
+                og_for_removal = flag_ogs_in_box_test2(device)
+                #og_for_removal = mock()
                 for key, value in og_for_removal.items():
                     for og in value:
                         result = output.orphaned_object_groups.create()
