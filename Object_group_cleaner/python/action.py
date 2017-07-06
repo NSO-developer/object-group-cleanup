@@ -91,10 +91,10 @@ class Action(Application):
 
 
 def mock():
-"""
-This is a mock function that returns a dictionary (or use a two dimensional list that has the og type
-and the og name). Use this function instead of our algorithm to perfect input and output on the web UI
-"""
+    """
+    This is a mock function that returns a dictionary (or use a two dimensional list that has the og type
+    and the og name). Use this function instead of our algorithm to perfect input and output on the web UI
+    """
     mock_og = {}
     mock_og["icmp-type"] = []
     mock_og["network"] = ['GEM-OG:voip_hong_kong_ucce_tftp',
