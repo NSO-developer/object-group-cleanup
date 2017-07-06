@@ -51,7 +51,7 @@ class ActionHandler(Action):
             devices = helpers.build_device_list(input)
             #device = 'svl-gem-joe-asa-fw1.cisco.com'
             for device in devices:
-                og_for_removal = flag_ogs_in_box_test2(device)
+                og_for_removal = obj_cleanup.flag_ogs_in_box_test2(device)
                 #og_for_removal = mock()
                 for key, value in og_for_removal.items():
                     for og in value:
