@@ -18,7 +18,7 @@ module input_output {
         leaf og_type { type string; }
         leaf object_group { type string; }
       }
-      leaf csv { type string; }
+      //leaf csv { type string; }
   }
 
   grouping input {
@@ -28,7 +28,7 @@ module input_output {
         type enumeration {
           enum "device_group";
           enum "device";
-          enum "csv";
+        //  enum "csv";
         }
       }
       leaf value { type string; }
