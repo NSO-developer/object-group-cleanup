@@ -12,6 +12,8 @@ import sys
 
 # import your_audit_name_here # Copy and change this to the name of your Python File
 import ncs
+from datetime import datetime
+import time
 import _ncs
 import _ncs.dp
 from ncs.dp import Action
