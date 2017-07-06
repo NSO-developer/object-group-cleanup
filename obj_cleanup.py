@@ -124,33 +124,59 @@ def flag_ogs_in_box_test2(box):
     """
     orphaned_og = []
     og_list = []
+    og_obj = []
     banishment = []
+    b_obj =[]
+    ret = {}
+
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
         rul_list = []
         for ogtyp in root.devices.device[box].config.asa__object_group:
             for og in root.devices.device[box].config.asa__object_group[ogtyp]:
                 og_list.append(og.id)
+                og_obj.append(og)
 
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
                 rul_list.append(rul)
     og_list = set(og_list)
     rul_list = set(rul_list)
+
     for og in og_list.difference(rul_list):
         banishment.append(og)
+
+    for i in og_obj:
+        if i.id in banishment:
+            #remove_ogs(box,i.id, str(i))
+            if str(i) in ret.keys():
+                ret[str(i)].append(i.id)
+            else:
+                ret[str(i)] = [i.id]
+
+
     if not banishment:
         no_ogs_error(box)
     else:
-        return list(set(banishment))
+        return ret
 
 def print_ogs_to_remove(box):
-    """ This function prints the object groups to be removed before removing.
+    """
+    This function prints the object groups to be removed before removing.
     """
     og_list = flag_ogs_in_box_test2(box)
     print "Devices to be removed in: ",box,"\n"
     for og in og_list:
         print og
+
+def remove_ogs(box, og_id, og_type):
+    """
+    This function removes the orphaned object groups for each device.
+    """
+    with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
+        root = ncs.maagic.get_root(t)
+        #del root.devices.device[box].config.asa__object_group[og_type][og_id]
+        t.apply()
 
 def no_ogs_error(box):
     """
@@ -163,7 +189,8 @@ if __name__ == "__main__":
     This is calling two functions and checking how much time it takes to run them.
     """
     b = time.time()
-    print print_ogs_to_remove('svl-gem-joe-asa-fw1.cisco.com')
+    #print_ogs_to_remove('svl-gem-joe-asa-fw1.cisco.com')
+    print flag_ogs_in_box_test2('svl-gem-joe-asa-fw1.cisco.com')
     af = time.time()
     print af-b
 
