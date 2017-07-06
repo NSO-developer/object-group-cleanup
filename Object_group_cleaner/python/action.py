@@ -12,15 +12,17 @@ import sys
 
 # import your_audit_name_here # Copy and change this to the name of your Python File
 import ncs
+from datetime import datetime
+import time
 import _ncs
 import _ncs.dp
 from ncs.dp import Action
 from ncs.application import Application
 from _namespaces.Object_group_cleaner_ns import ns
 import helpers
-import obj_cleanup
+#import obj_cleanup #make sure to put this in the python folder
 
-date_format = "%H:%M:%S.%f"
+DATE_FORMAT = "%H:%M:%S.%f"
 
 class ActionHandler(Action):
     """This class implements the dp.Action class."""
@@ -47,14 +49,16 @@ class ActionHandler(Action):
         output.start_time = time.strftime("%H:%M:%S")
         if name == "search":
             devices = helpers.build_device_list(input)
+            #device = 'svl-gem-joe-asa-fw1.cisco.com'
             for device in devices:
-                #og_for_removal = obj_cleanup.flag_ogs_in_box(device)
+            #og_for_removal = flag_ogs_in_box_test2(device)
                 og_for_removal = mock()
-                for og in og_for_removal:
-                    result = output.orphaned_object_groups.create()
-                    result.object_group = og["og"]
-                    result.og_type = og["og_type"]
-                    result.device = device
+                for key, value in og_for_removal.items():
+                    for og in value:
+                        result = output.orphaned_object_groups.create()
+                        result.object_group = og
+                        result.og_type = key
+                        result.device = device
 
         elif name == "remove":
             pass # add remove function and remove pass statement
@@ -81,15 +85,43 @@ class Action(Application):
     # DO NOT CHANGE THIS INFORMATION
 
     def setup(self):
-        """Setting up the action callback.
-           This is used internally by NSO when NSO is re-started or packages a reloaded by NSO.
+        """
+        Setting up the action callback.
+        This is used internally by NSO when NSO is re-started or packages a reloaded by NSO.
         """
         self.log.debug('action app start')
         self.register_action('Object_group_cleaner', ActionHandler, [])
 
 
 def mock():
-"""
-This is a mock function that returns a dictionary (or use a two dimensional list that has the og type
-and the og name). Use this function instead of our algorithm to perfect input and output on the web UI
-"""
+    """
+    This is a mock function that returns a dictionary (or use a two dimensional list that has the og type
+    and the og name). Use this function instead of our algorithm to perfect input and output on the web UI
+    """
+    mock_og = {}
+    mock_og["icmp-type"] = []
+    mock_og["network"] = ['GEM-OG:voip_hong_kong_ucce_tftp',
+            'HOST:alli-prd-29.cisco.com',
+            'gem_og_itst_prd_ports',
+            'GHOST:nqs-hkg-h01-p.cisco.com',
+            'HOST:rcdn-core2.cisco.com',
+            'HOST:nqs-sjc-h06-p.cisco.com',
+            'HOST:nqs-sjc-h06-p.cisco.com',
+            'GEM-OG:tacacs',
+            'common_host_1',
+            'HOST:mfgtde-dev.cisco.com',
+            'HOST:ees-singapore.cisco.com',
+            'eman_networks-global-1']
+    mock_og["service"] = ['GEM-OG:bts-view_servers',
+            'HOST:wwwin-sso-prod3.cisco.com',
+            'HOST:mail-aln.cisco.com',
+            'HOST:alli-prd-27.cisco.com',
+            'HOST:nqs-blr-h01-p.cisco.com',
+            'HOST:sj5autotrack.cisco.com',
+            'NDCS-OG:dmz_networks-sjc-1',
+            'GEM-OG:intellectual_property',
+            'GEM-OG:voip_rtp_campus_cucm',
+            'gem_og_itst_prd_ports']
+    mock_og["user"] = []
+
+    return mock_og
