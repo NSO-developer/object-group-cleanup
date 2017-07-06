@@ -53,7 +53,7 @@ class ActionHandler(Action):
             for device in devices:
             #og_for_removal = flag_ogs_in_box_test2(device)
                 og_for_removal = mock()
-                for key, value in og_for_removal.iteritems():
+                for key, value in og_for_removal.items():
                     for og in value:
                         result = output.orphaned_object_groups.create()
                         result.object_group = og
