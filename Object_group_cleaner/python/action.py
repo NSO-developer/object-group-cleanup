@@ -22,7 +22,7 @@ from _namespaces.Object_group_cleaner_ns import ns
 import helpers
 #import obj_cleanup #make sure to put this in the python folder
 
-date_format = "%H:%M:%S.%f"
+DATE_FORMAT = "%H:%M:%S.%f"
 
 class ActionHandler(Action):
     """This class implements the dp.Action class."""
