@@ -18,7 +18,7 @@ from ncs.dp import Action
 from ncs.application import Application
 from _namespaces.Object_group_cleaner_ns import ns
 import helpers
-import obj_cleanup
+#import obj_cleanup #make sure to put this in the python folder
 
 date_format = "%H:%M:%S.%f"
 
@@ -83,8 +83,9 @@ class Action(Application):
     # DO NOT CHANGE THIS INFORMATION
 
     def setup(self):
-        """Setting up the action callback.
-           This is used internally by NSO when NSO is re-started or packages a reloaded by NSO.
+        """
+        Setting up the action callback.
+        This is used internally by NSO when NSO is re-started or packages a reloaded by NSO.
         """
         self.log.debug('action app start')
         self.register_action('Object_group_cleaner', ActionHandler, [])
