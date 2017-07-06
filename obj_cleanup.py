@@ -127,6 +127,7 @@ def flag_ogs_in_box_test2(box):
     og_obj = []
     banishment = []
     b_obj =[]
+    ret = {}
 
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
@@ -147,12 +148,17 @@ def flag_ogs_in_box_test2(box):
 
     for i in og_obj:
         if i.id in banishment:
-            remove_ogs(box,i.id, str(i))
+            #remove_ogs(box,i.id, str(i))
+            if str(i) in ret.keys():
+                ret[str(i)].append(i.id)
+            else:
+                ret[str(i)] = [i.id]
+
 
     if not banishment:
         no_ogs_error(box)
     else:
-        return list(set(banishment))
+        return ret
 
 def print_ogs_to_remove(box):
     """
@@ -184,7 +190,7 @@ if __name__ == "__main__":
     """
     b = time.time()
     #print_ogs_to_remove('svl-gem-joe-asa-fw1.cisco.com')
-    flag_ogs_in_box_test2('svl-gem-joe-asa-fw1.cisco.com')
+    print flag_ogs_in_box_test2('svl-gem-joe-asa-fw1.cisco.com')
     af = time.time()
     print af-b
 
