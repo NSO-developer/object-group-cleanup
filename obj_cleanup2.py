@@ -5,6 +5,8 @@ import Queue
 import time
 import concurrent.futures
 
+banishment = []
+
 def find_rule_in_ACL (box, og, root, rul, q):
     """
     This funcion will iterate through the rules in the ACL to find matches of the given OG. Returns boolean
@@ -81,42 +83,64 @@ def flag_ogs_in_box_test(box):
     """
     orphaned_og = []
     og_list = []
+    og_typ = []
     acl_list = []
-    banishment = []
+    ret = {}
+    #flag = False
+    #banishment = []
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
         rul_list = []
         for ogtyp in root.devices.device[box].config.asa__object_group:
             for og in root.devices.device[box].config.asa__object_group[ogtyp]:
                 og_list.append(og.id)
+                og_typ.append(str(og))
 
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
+            rul_list2 = []
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
-                rul_list2 = []
-                rul_list.append(rul)
-                rul_list2.append(rul)
+                rul_list.append(rul.id)
+                rul_list2.append(rul.id)
             acl_list.append(rul_list2)
     #print rul_list
     #print og_list
+    #for og in list(set(og_list)):
+        #with concurrent.futures.ThreadPoolExecutor(max_workers=1000) as executor:
+        #future_to_acl = {executor.submit(banish, og, banishment, acl): acl for acl in acl_list}
 
-    executor = concurrent.futures.ThreadPoolExecutor(max_workers=1000)
-    futures = []
-    for og in list(set(og_list)):
+    #print rul_list
+    #executor = concurrent.futures.ThreadPoolExecutor(max_workers=1000)
+    #futures = []
+    for og, typ in zip(og_list, og_typ):
         for acl in acl_list:
-            thread = executor.submit(banish, og, banishment, acl)
-            futures.append(thread)
-    concurrent.futures.wait(futures)
-    return list(set(banishment))
+            #thread = executor.submit(banish, og, acl)
+            #futures.append(thread)
+            #flag = thread.result()
+            flag = banish(og, acl)
+            if flag:
+                break
+        if not flag:
+            if typ in ret.keys():
+                ret[typ].append(og)
+            else:
+                ret[typ] = [og]
+            #banishment.append(og)
+    #concurrent.futures.wait(futures)
 
-def banish(og, banishment, acl):
+    return ret
+
+def banish(og, acl):
     """
     This function appends a object group to a list (banishment) if it is not found in an ACL rule. This function runs on threads.
     """
     for rule in acl:
+        #print rule.id
+        #print og
         if og in rule:
-            break
-        else:
-            banishment.append(og)
+            return True
+            #banishment.append(og)
+    return False
+
 
 def flag_ogs_in_box_test2(box):
     """
@@ -136,9 +160,6 @@ def flag_ogs_in_box_test2(box):
             for og in root.devices.device[box].config.asa__object_group[ogtyp]:
                 og_list.append(og.id)
                 og_obj.append(og)
-                print "OG:" og
-                print "OG.id:" og.id
-
 
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
@@ -146,13 +167,14 @@ def flag_ogs_in_box_test2(box):
     og_list = set(og_list)
     rul_list = set(rul_list)
 
+
     for og in og_list.difference(rul_list):
         banishment.append(og)
 
     for i in og_obj:
         if i.id in banishment:
             #remove_ogs(box,i.id, str(i))
-            print str(i)
+            #print "TYPE: %s" % str(i)
             if str(i) in ret.keys():
                 ret[str(i)].append(i.id)
             else:
@@ -192,13 +214,13 @@ if __name__ == "__main__":
     """
     This is calling two functions and checking how much time it takes to run them.
     """
-    b = time.time()
+    #b = time.time()
     #print_ogs_to_remove('svl-gem-joe-asa-fw1.cisco.com')
-    print flag_ogs_in_box_test2('svl-gem-joe-asa-fw1.cisco.com')
-    af = time.time()
-    print af-b
+    #flag_ogs_in_box_test2('svl-gem-joe-asa-fw1.cisco.com')
+    #af = time.time()
+    #print af-b
 
     b = time.time()
-    flag_ogs_in_box_test('svl-gem-joe-asa-fw1.cisco.com')
+    print flag_ogs_in_box_test('svl-gem-joe-asa-fw1.cisco.com')
     af = time.time()
     print af-b
