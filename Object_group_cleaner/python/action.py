@@ -51,7 +51,7 @@ class ActionHandler(Action):
             devices = helpers.build_device_list(input)
             #device = 'svl-gem-joe-asa-fw1.cisco.com'
             for device in devices:
-                og_for_removal = obj_cleanup.flag_ogs_in_box_test2(device)
+                og_for_removal = obj_cleanup.flag_ogs_in_box_test(device)
                 #og_for_removal = mock()
                 for key, value in og_for_removal.items():
                     for og in value:
@@ -61,7 +61,15 @@ class ActionHandler(Action):
                         result.device = device
 
         elif name == "remove":
-            pass # add remove function and remove pass statement
+            object_groups = helpers.build_og_list(input)
+            for og in object_groups:
+                obj_cleanup.remove_ogs(og[0], og[1], og[2])
+                result = output.deleted_object_groups.create()
+                result.device = og[0]
+                result.og_type = og[1]
+                result.object_group = og[2]
+            output.stat = "Success"
+                # add remove function and remove pass statement
 
         else:
             # Log & return general failures

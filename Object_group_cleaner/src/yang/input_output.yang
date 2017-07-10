@@ -69,8 +69,15 @@ module input_output {
       }
     }
     output {
-      uses output;
+      leaf start_time { type string; }
+      leaf end_time { type string; }
+      leaf run_time { type string; }
+      list deleted_object_groups {
+        leaf device { type string; }
+        leaf og_type { type string; }
+        leaf object_group { type string; }
       }
+      leaf stat { type string; }
    }
  }
  }
