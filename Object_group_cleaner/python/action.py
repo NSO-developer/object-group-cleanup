@@ -63,8 +63,8 @@ class ActionHandler(Action):
         elif name == "remove":
             obj_groups = helpers.build_og_list(input)
             for obj in obj_groups:
-                self.log.info(obj[1])
                 obj_cleanup.remove_ogs(obj[0], obj[1], obj[2])
+                self.log.info(obj[1])
                 result = output.deleted_object_groups.create()
                 result.device = obj[0]
                 result.og_type = obj[1]
