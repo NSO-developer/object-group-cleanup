@@ -61,13 +61,14 @@ class ActionHandler(Action):
                         result.device = device
 
         elif name == "remove":
-            object_groups = helpers.build_og_list(input)
-            for og in object_groups:
-                obj_cleanup.remove_ogs(og[0], og[1], og[2])
+            obj_groups = helpers.build_og_list(input)
+            for obj in obj_groups:
+                self.log.info(obj[0])
+                obj_cleanup.remove_ogs(obj[0], obj[1], obj[2])
                 result = output.deleted_object_groups.create()
-                result.device = og[0]
-                result.og_type = og[1]
-                result.object_group = og[2]
+                result.device = obj[0]
+                result.og_type = obj[1]
+                result.object_group = obj[2]
             output.stat = "Success"
                 # add remove function and remove pass statement
 
