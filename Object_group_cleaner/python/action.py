@@ -54,7 +54,7 @@ class ActionHandler(Action):
                 og_for_removal = obj_cleanup.search_and_destroy(device)
                 for key, value in og_for_removal.items():
                     for og in value:
-                        result = output.orphaned_object_groups.create()
+                        result = output.deleted_object_groups.create()
                         result.object_group = og
                         result.og_type = key
                         result.device = device
@@ -68,7 +68,7 @@ class ActionHandler(Action):
                 #og_for_removal = mock()
                 for key, value in og_for_removal.items():
                     for og in value:
-                        result = output.deleted_object_groups.create()
+                        result = output.orphaned_object_groups.create()
                         result.object_group = og
                         result.og_type = key
                         result.device = device
