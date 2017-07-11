@@ -69,6 +69,7 @@ def remove_ogs(box, og_type, og_id):
     A function that removes the object group from the object group list using
     the arguments passed: device name, object group name, and object group type.
     """
+    #og_type = "asa:" + og_type
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
         del root.devices.device[box].config.asa__object_group[og_type][og_id]
