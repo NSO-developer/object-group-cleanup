@@ -56,15 +56,8 @@ module input_output {
       list inputs {
         tailf:info "Input values for remove";
         leaf device_name { type string; }
-        leaf og_type {
-          type enumeration {
-            enum "service";
-            enum "network";
-            enum "icmp-type";
-            enum "user";
-          }
-        }
-        leaf og_name {type string;}
+        leaf og_type { type string; }
+        leaf og_name { type string; }
 
       }
     }
