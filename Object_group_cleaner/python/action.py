@@ -47,7 +47,20 @@ class ActionHandler(Action):
 
         start = (datetime.strptime(str(datetime.now().time()), DATE_FORMAT))
         output.start_time = time.strftime("%H:%M:%S")
-        if name == "search":
+
+        if name == "search_and_delete":
+            devices = helpers.build_device_list(input)
+            for device in devices:
+                og_for_removal = obj_cleanup.search_and_destroy(device)
+                for key, value in og_for_removal.items():
+                    for og in value:
+                        result = output.orphaned_object_groups.create()
+                        result.object_group = og
+                        result.og_type = key
+                        result.device = device
+            output.stat = "Success"
+
+        elif name == "search":
             devices = helpers.build_device_list(input)
             #device = 'svl-gem-joe-asa-fw1.cisco.com'
             for device in devices:
@@ -71,7 +84,7 @@ class ActionHandler(Action):
                 result.og_type = obj[1]
                 result.object_group = obj[2]
             output.stat = "Success"
-                # add remove function and remove pass statement
+                
 
         else:
             # Log & return general failures
