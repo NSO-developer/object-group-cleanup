@@ -100,25 +100,5 @@ module input_output {
       leaf stat { type string; }
    }
  }
- 
- tailf:action search-and-remove{
-   tailf:actionpoint Object_group_cleaner;
-   tailf:info "Find and remove orphaned object groups";
-   input {
-     uses input;
-   }
-   output {
-     leaf start_time { type string; }
-     leaf end_time { type string; }
-     leaf run_time { type string; }
-     list deleted_object_groups {
-       leaf device { type string; }
-       leaf og_type { type string; }
-       leaf object_group { type string; }
-     }
-     leaf stat { type string; }
-  }
-   }
-
  }
  }

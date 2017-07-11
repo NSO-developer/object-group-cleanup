@@ -84,7 +84,7 @@ class ActionHandler(Action):
                 result.og_type = obj[1]
                 result.object_group = obj[2]
             output.stat = "Success"
-                
+
 
         else:
             # Log & return general failures
