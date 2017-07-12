@@ -53,7 +53,7 @@ module input_output {
         leaf object_group { type string; }
       }
       leaf stat { type string; }
-      leaf number_of_ogs_deleted { type int; }
+      leaf number_of_ogs_deleted { type uint32; }
     }
   }
 
