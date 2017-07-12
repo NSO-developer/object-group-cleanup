@@ -53,7 +53,8 @@ class ActionHandler(Action):
             devices = helpers.build_device_list(input)
             for device in devices:
                 og_for_removal = obj_cleanup.search_and_destroy(device)
-                count += len(list(og_for_removal))
+                count += len(og_for_removal.items())
+                self.log.info(count)
                 for key, value in og_for_removal.items():
                     for og in value:
                         result = output.deleted_object_groups.create()
