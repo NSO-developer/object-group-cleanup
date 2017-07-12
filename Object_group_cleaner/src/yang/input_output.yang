@@ -36,6 +36,26 @@ module input_output {
   }
 
   grouping input_output {
+
+  tailf:action search_and_delete {
+    tailf:actionpoint Object_group_cleaner;
+    tailf:info "Search and remove orphaned object groups";
+    input {
+      uses input;
+    }
+    output {
+      leaf start_time { type string; }
+      leaf end_time { type string; }
+      leaf run_time { type string; }
+      list deleted_object_groups {
+        leaf device { type string; }
+        leaf og_type { type string; }
+        leaf object_group { type string; }
+      }
+      leaf stat { type string; }
+    }
+  }
+
   tailf:action search {
     tailf:actionpoint Object_group_cleaner;
     tailf:info "Find orphaned object groups";
@@ -69,8 +89,16 @@ module input_output {
       }
     }
     output {
-      uses output;
+      leaf start_time { type string; }
+      leaf end_time { type string; }
+      leaf run_time { type string; }
+      list deleted_object_groups {
+        leaf device { type string; }
+        leaf og_type { type string; }
+        leaf object_group { type string; }
       }
+      leaf stat { type string; }
    }
+ }
  }
  }

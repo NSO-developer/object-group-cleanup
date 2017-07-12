@@ -47,11 +47,24 @@ class ActionHandler(Action):
 
         start = (datetime.strptime(str(datetime.now().time()), DATE_FORMAT))
         output.start_time = time.strftime("%H:%M:%S")
-        if name == "search":
+
+        if name == "search_and_delete":
+            devices = helpers.build_device_list(input)
+            for device in devices:
+                og_for_removal = obj_cleanup.search_and_destroy(device)
+                for key, value in og_for_removal.items():
+                    for og in value:
+                        result = output.deleted_object_groups.create()
+                        result.object_group = og
+                        result.og_type = key
+                        result.device = device
+            output.stat = "Success"
+
+        elif name == "search":
             devices = helpers.build_device_list(input)
             #device = 'svl-gem-joe-asa-fw1.cisco.com'
             for device in devices:
-                og_for_removal = obj_cleanup.flag_ogs_in_box_test2(device)
+                og_for_removal = obj_cleanup.flag_ogs_in_box_test(device)
                 #og_for_removal = mock()
                 for key, value in og_for_removal.items():
                     for og in value:
@@ -61,7 +74,17 @@ class ActionHandler(Action):
                         result.device = device
 
         elif name == "remove":
-            pass # add remove function and remove pass statement
+            obj_groups = helpers.build_og_list(input)
+            for obj in obj_groups:
+                #obj[1] = "asa:" + obj[1]
+                self.log.info(obj[1])
+                obj_cleanup.remove_ogs(obj[0], obj[1], obj[2])
+                result = output.deleted_object_groups.create()
+                result.device = obj[0]
+                result.og_type = obj[1]
+                result.object_group = obj[2]
+            output.stat = "Success"
+
 
         else:
             # Log & return general failures
