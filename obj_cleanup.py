@@ -70,6 +70,7 @@ def flag_ogs_in_box(box):
         #print threading.activeCount()
         for t in threads:
             t.join()
+
         #if not find_in_ACLS(box,og,root):
                     #print og.id
                     #orphaned_og.append(og.id)
@@ -139,20 +140,20 @@ def flag_ogs_in_box_test2(box):
 
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
-                rul_list.append(rul)
+                rul_list.append(rul.id)
     og_list = set(og_list)
     rul_list = set(rul_list)
 
     for og in og_list.difference(rul_list):
         banishment.append(og)
 
-    for i in og_obj:
-        if i.id in banishment:
-            #remove_ogs(box,i.id, str(i))
-            if str(i) in ret.keys():
-                ret[str(i)].append(i.id)
-            else:
-                ret[str(i)] = [i.id]
+#    for i in og_obj:
+#        if i.id in banishment:
+#            #remove_ogs(box,i.id, str(i))
+#            if str(i) in ret.keys():
+#                ret[str(i)].append(i.id)
+#            else:
+#                ret[str(i)] = [i.id]
 
 
     if not banishment:
