@@ -86,6 +86,6 @@ if __name__ == "__main__":
     """
 
     b = time.time()
-    print flag_ogs_in_box_test('svl-gem-joe-asa-fw1.cisco.com')
+    print flag_ogs_in_box_test('svl-gem-asav.cisco.com')
     af = time.time()
     print af-b
