@@ -82,7 +82,7 @@ def no_ogs_error(box):
 
 if __name__ == "__main__":
     """
-    Main code that is used to test functionality of algorithms
+    Main code that is used to test functionality of algorithms.
     """
 
     b = time.time()
