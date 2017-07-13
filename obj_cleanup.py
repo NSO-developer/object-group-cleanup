@@ -150,15 +150,6 @@ def flag_ogs_in_box_test2(box):
     for og in og_list.difference(rul_list):
         banishment.append(og)
 
-<<<<<<< HEAD
-#    for i in og_obj:
-#        if i.id in banishment:
-#            #remove_ogs(box,i.id, str(i))
-#            if str(i) in ret.keys():
-#                ret[str(i)].append(i.id)
-#            else:
-#                ret[str(i)] = [i.id]
-=======
     for i in og_obj:
         if i.id in banishment:
             #remove_ogs(box,i.id, str(i))
@@ -167,7 +158,6 @@ def flag_ogs_in_box_test2(box):
                 ret[str(i)].append(i.id)
             else:
                 ret[str(i)] = [i.id]
->>>>>>> bd4b6798acdfd1073e45b7e9b271d64ac9d4d35e
 
 
     if not banishment:
