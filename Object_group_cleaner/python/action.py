@@ -1,5 +1,5 @@
 """
-NCS Action Package example.
+NCS Action Package example. 
 
 Implements a package with actions
 (C) 2015 Tail-f Systems
