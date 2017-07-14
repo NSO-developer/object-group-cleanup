@@ -48,7 +48,7 @@ class ActionHandler(Action):
         start = (datetime.strptime(str(datetime.now().time()), DATE_FORMAT))
         output.start_time = time.strftime("%H:%M:%S")
 
-        if name == "search_and_delete":
+        if name == "cleanup":
             count = 0
             devices = helpers.build_device_list(input)
             for device in devices:
