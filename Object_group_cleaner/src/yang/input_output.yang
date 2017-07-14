@@ -47,13 +47,13 @@ module input_output {
       leaf start_time { type string; }
       leaf end_time { type string; }
       leaf run_time { type string; }
+      leaf stat { type string; }
+      leaf number_of_ogs_deleted { type uint32; }
       list deleted_object_groups {
         leaf device { type string; }
         leaf og_type { type string; }
         leaf object_group { type string; }
       }
-      leaf stat { type string; }
-      leaf number_of_ogs_deleted { type uint32; }
     }
   }
 
