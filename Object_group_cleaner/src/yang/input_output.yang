@@ -39,7 +39,7 @@ module input_output {
 
   tailf:action cleanup {
     tailf:actionpoint Object_group_cleaner;
-    tailf:info "Search and remove orphaned object groups";
+    tailf:info "Search and remove unused object groups from devices";
     input {
       uses input;
     }
@@ -59,7 +59,7 @@ module input_output {
 
   tailf:action search {
     tailf:actionpoint Object_group_cleaner;
-    tailf:info "Find orphaned object groups";
+    tailf:info "Seach for unused object groups within devices";
     input {
       uses input;
     }
@@ -71,7 +71,7 @@ module input_output {
 
   tailf:action remove {
     tailf:actionpoint Object_group_cleaner;
-    tailf:info "Remove orphaned object groups";
+    tailf:info "Remove specific object groups from a devices object group list";
     input {
       leaf csv { type string; }
       list inputs {
