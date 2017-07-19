@@ -137,8 +137,8 @@ def flag_ogs_in_box_test2(box):
             for og in root.devices.device[box].config.asa__object_group[ogtyp]:
                 og_list.append(og.id)
                 og_obj.append(og)
-                print "OG:" og
-                print "OG.id:" og.id
+                #print "OG:" og
+                #print "OG.id:" og.id
 
 
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
@@ -153,7 +153,7 @@ def flag_ogs_in_box_test2(box):
     for i in og_obj:
         if i.id in banishment:
             #remove_ogs(box,i.id, str(i))
-            print str(i)
+            #print str(i)
             if str(i) in ret.keys():
                 ret[str(i)].append(i.id)
             else:
@@ -195,11 +195,11 @@ if __name__ == "__main__":
     """
     b = time.time()
     #print_ogs_to_remove('svl-gem-joe-asa-fw1.cisco.com')
-    print flag_ogs_in_box_test2('svl-gem-joe-asa-fw1.cisco.com')
+    #print flag_ogs_in_box_test2('svl-gem-joe-asa-fw1.cisco.com')
     af = time.time()
     print af-b
 
     b = time.time()
-    flag_ogs_in_box_test('svl-gem-joe-asa-fw1.cisco.com')
+    print flag_ogs_in_box_test('svl-gem-joe-asa-fw1.cisco.com')
     af = time.time()
     print af-b

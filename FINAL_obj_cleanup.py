@@ -13,7 +13,6 @@ def flag_ogs_in_box_test(box):
     og_list = []
     og_typ = []
     acl_list = []
-    #rul_list = []
     ret = {}
 
     #Creating transaction and setting root to access NSO
@@ -30,7 +29,6 @@ def flag_ogs_in_box_test(box):
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
             temp_rul_list = []
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
-                #rul_list.append(rul.id)
                 temp_rul_list.append(rul.id)
             acl_list.append(temp_rul_list)
 
