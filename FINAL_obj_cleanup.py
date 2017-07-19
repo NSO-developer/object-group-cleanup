@@ -24,6 +24,7 @@ def flag_ogs_in_box_test(box):
                 og_list.append(og.id)
                 og_typ.append(str(og))      #str(og) is the object group type
 
+        print "Total Number of OG's: %d" %len(og_list)
         #Adding each access list's rules to a python list (temp_rul_list) and
         #then adding those lists as elements of another python list (acl_list)
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
@@ -70,7 +71,10 @@ def remove_ogs(box, og_id, og_type):
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
         del root.devices.device[box].config.asa__object_group[og_type][og_id]
-        t.apply()
+        try:
+            t.apply()
+        except:
+            print "Error! NSO was unable to remove object groups."
 
 def no_ogs_error(box):
     """
@@ -82,8 +86,12 @@ if __name__ == "__main__":
     """
     Main code that is used to test functionality of algorithms.
     """
-
+    count = 0
     b = time.time()
-    print flag_ogs_in_box_test('svl-gem-asav.cisco.com')
+    orphaned_ogs =  flag_ogs_in_box_test('svl-gem-joe-asa-fw1.cisco.com')
+    print orphaned_ogs
+    for key in orphaned_ogs:
+        count += len(orphaned_ogs[key])
+    print "# of OG's to remove: %d" %count
     af = time.time()
     print af-b

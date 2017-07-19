@@ -1,5 +1,5 @@
 """
-NCS Action Package example.
+NCS Action Package example. 
 
 Implements a package with actions
 (C) 2015 Tail-f Systems
@@ -48,13 +48,13 @@ class ActionHandler(Action):
         start = (datetime.strptime(str(datetime.now().time()), DATE_FORMAT))
         output.start_time = time.strftime("%H:%M:%S")
 
-        if name == "search_and_delete":
+        if name == "cleanup":
             count = 0
             devices = helpers.build_device_list(input)
             for device in devices:
                 og_for_removal = obj_cleanup.search_and_destroy(device)
                 for key in og_for_removal:
-                    count = len(og_for_removal[key])
+                    count += len(og_for_removal[key])
                 self.log.info(count)
                 for key, value in og_for_removal.items():
                     for og in value:
