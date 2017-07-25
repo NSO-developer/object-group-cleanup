@@ -27,17 +27,6 @@ create a session with NSO
            check if obj group is in the access list
 ```
 
-### Discussion
-
-1. Is there a way to actually see these obj group lists? or sample access list?
-2. Can we do better than using a O(n^3) algorithm?
-3. Are they sorted in any way?
-4. Do we care about runtime/ space?
-
-### Ideas
-- may be store in a more efficient data structure
-- sort that structure
-
 ### Project Team Members
 Divyani Rao <br  />
 Alyssa Sandore <br />
