@@ -28,8 +28,8 @@ def search_and_destroy(box):
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
             temp_rul_list = []
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
-                #rul_list.append(rul.id)
-                temp_rul_list.append(rul.id)
+                if "object-group" in rul.id:
+                    temp_rul_list.append(rul.id)
             acl_list.append(temp_rul_list)
 
         #Iterating through both object group and object group type lists simultaneously
