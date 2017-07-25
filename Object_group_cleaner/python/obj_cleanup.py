@@ -50,8 +50,8 @@ def search_and_destroy(box):
                 else:
                     ret[typ] = [og]
                 del root.devices.device[box].config.asa__object_group[typ][og]
-                t.apply()
 
+        t.apply()
     return ret
 
 
