@@ -14,7 +14,7 @@ def flag_ogs_in_box_test(box):
     og_typ = []
     acl_list = []
     ret = {}
-
+    i = 0
     #Creating transaction and setting root to access NSO
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
@@ -29,10 +29,14 @@ def flag_ogs_in_box_test(box):
         #then adding those lists as elements of another python list (acl_list)
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
             temp_rul_list = []
+            print "Access List #: %d" % i
+            i = i + 1
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
-                temp_rul_list.append(rul.id)
+                if "object-group" in rul.id:
+                    temp_rul_list.append(rul.id)
             acl_list.append(temp_rul_list)
 
+        print "DEBUG"
     #Iterating through both object group and object group type lists simultaneously
     for og, typ in zip(og_list, og_typ):
         for acl in acl_list:
@@ -73,6 +77,8 @@ def remove_ogs(box, og_id, og_type):
         del root.devices.device[box].config.asa__object_group[og_type][og_id]
         try:
             t.apply()
+        except TimeoutError:
+            print "Timeout Error"
         except:
             print "Error! NSO was unable to remove object groups."
 
@@ -88,7 +94,7 @@ if __name__ == "__main__":
     """
     count = 0
     b = time.time()
-    orphaned_ogs =  flag_ogs_in_box_test('svl-gem-joe-asa-fw1.cisco.com')
+    orphaned_ogs =  flag_ogs_in_box_test('svl-gem-ubvpn-gw1a.cisco.com')
     print orphaned_ogs
     for key in orphaned_ogs:
         count += len(orphaned_ogs[key])

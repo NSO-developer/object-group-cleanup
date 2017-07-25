@@ -32,24 +32,24 @@ def search_and_destroy(box):
                 temp_rul_list.append(rul.id)
             acl_list.append(temp_rul_list)
 
-    #Iterating through both object group and object group type lists simultaneously
-    for og, typ in zip(og_list, og_typ):
-        for acl in acl_list:
-            #flag indicates whether og was found in an access list
-            flag = banish(og, acl)
-            #If found, continue to the next object group
-            if flag:
-                break
-        #If not found in any of the access lists, delete from object group list
-        #and add to dictionary
-        if not flag:
-            #If key has been created already, add og to key
-            if typ in ret.keys():
-                ret[typ].append(og)
-            #Else, create key and append og
-            else:
-                ret[typ] = [og]
-            remove_ogs(box, typ, og)
+        #Iterating through both object group and object group type lists simultaneously
+        for og, typ in zip(og_list, og_typ):
+            for acl in acl_list:
+                #flag indicates whether og was found in an access list
+                flag = banish(og, acl)
+                #If found, continue to the next object group
+                if flag:
+                    break
+            #If not found in any of the access lists, delete from object group list
+            #and add to dictionary
+            if not flag:
+                #If key has been created already, add og to key
+                if typ in ret.keys():
+                    ret[typ].append(og)
+                #Else, create key and append og
+                else:
+                    ret[typ] = [og]
+                remove_ogs(box, typ, og, root)
 
     return ret
 
@@ -116,16 +116,14 @@ def banish(og, acl):
             return True
     return False
 
-def remove_ogs(box, og_type, og_id):
+def remove_ogs(box, og_type, og_id, root):
     """
     A function that removes the object group from the object group list using
     the arguments passed: device name, object group name, and object group type.
     """
-    #og_type = "asa:" + og_type
-    with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
-        root = ncs.maagic.get_root(t)
-        del root.devices.device[box].config.asa__object_group[og_type][og_id]
-        t.apply()
+
+    del root.devices.device[box].config.asa__object_group[og_type][og_id]
+    t.apply()
 
 def no_ogs_error(box):
     """
