@@ -1,6 +1,6 @@
 import ncs
 import socket
-import time
+
 
 def search_and_destroy(box):
     """
@@ -11,7 +11,6 @@ def search_and_destroy(box):
     og_list = []
     og_typ = []
     acl_list = []
-    #rul_list = []
     ret = {}
 
     #Creating transaction and setting root to access NSO
@@ -66,7 +65,6 @@ def flag_ogs_in_box_test(box):
     og_list = []
     og_typ = []
     acl_list = []
-    #rul_list = []
     ret = {}
 
     #Creating transaction and setting root to access NSO
@@ -83,7 +81,6 @@ def flag_ogs_in_box_test(box):
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
             temp_rul_list = []
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
-                #rul_list.append(rul.id)
                 temp_rul_list.append(rul.id)
             acl_list.append(temp_rul_list)
 
@@ -117,27 +114,9 @@ def banish(og, acl):
             return True
     return False
 
-def remove_ogs(box, og_type, og_id, root):
-    """
-    A function that removes the object group from the object group list using
-    the arguments passed: device name, object group name, and object group type.
-    """
-
-    del root.devices.device[box].config.asa__object_group[og_type][og_id]
-    t.apply()
 
 def no_ogs_error(box):
     """
     This function prints an error message if there are no object groups to be removed for a device.
     """
     print "Error: There are no object groups that need to be removed for device ",box,"."
-
-if __name__ == "__main__":
-    """
-    Main code that is used to test functionality of algorithms
-    """
-
-    b = time.time()
-    print flag_ogs_in_box_test('svl-gem-joe-asa-fw1.cisco.com')
-    af = time.time()
-    print af-b
