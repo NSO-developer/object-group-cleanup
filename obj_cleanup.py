@@ -1,7 +1,7 @@
 import ncs
 import socket
 import time
-
+import re
 
 def flag_ogs_in_box_test(box):
     """
@@ -14,7 +14,7 @@ def flag_ogs_in_box_test(box):
     og_typ = []
     acl_list = []
     ret = {}
-    #i = 0
+
     #Creating transaction and setting root to access NSO
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
@@ -33,7 +33,10 @@ def flag_ogs_in_box_test(box):
             #i = i + 1
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
                 if "object-group" in rul.id:
-                    temp_rul_list.append(rul.id)
+                    #temp_rul_list.append(rul.id)
+                    match = re.findall('object-group ([\w:*.*]+[-\w+*.*]*)', rul.id)
+                    for m in match:
+                        temp_rul_list.append(m)
             acl_list.append(temp_rul_list)
 
         print "DEBUG"
@@ -99,12 +102,10 @@ if __name__ == "__main__":
     """
     Main code that is used to test functionality of algorithms.
     """
-    #count = 0
+
     b = time.time()
     orphaned_ogs =  flag_ogs_in_box_test('svl-gem-ubvpn-gw1a.cisco.com')
     print orphaned_ogs
-    #for key in orphaned_ogs:
-        #count += len(orphaned_ogs[key])
-    #print "# of OG's to remove: %d" %count
+
     af = time.time()
     print af-b

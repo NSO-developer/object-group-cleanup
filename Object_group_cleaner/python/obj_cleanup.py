@@ -2,6 +2,7 @@ import ncs
 import socket
 
 
+
 def search_and_destroy(box):
     """
     A function that deletes the object groups from the device's object group
