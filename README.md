@@ -16,6 +16,7 @@ The main activities to be completed are:
 ## Brief Explanation
 A tool that takes a device or device group as an input. It checks each of the device's object groups against the inputted device's access lists and removes the unused object groups. Each device will now only have the object groups that appear in the access lists.
 
+---
 ## Dependencies
 - NSO 4.4
 - Python Libraries: ncs, socket, time
