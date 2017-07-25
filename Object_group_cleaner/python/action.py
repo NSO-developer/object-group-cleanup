@@ -61,7 +61,7 @@ class ActionHandler(Action):
                         result = output.deleted_object_groups.create()
                         result.object_group = og
                         result.og_type = key
-                        result.device = device
+                        #result.device = device
             output.number_of_ogs_deleted = count
             output.stat = "Success"
 
@@ -76,7 +76,7 @@ class ActionHandler(Action):
                         result = output.orphaned_object_groups.create()
                         result.object_group = og
                         result.og_type = key
-                        result.device = device
+                        #result.device = device
 
         elif name == "remove":
             obj_groups = helpers.build_og_list(input)
@@ -85,7 +85,7 @@ class ActionHandler(Action):
                 self.log.info(obj[1])
                 obj_cleanup.remove_ogs(obj[0], obj[1], obj[2])
                 result = output.deleted_object_groups.create()
-                result.device = obj[0]
+                #result.device = obj[0]
                 result.og_type = obj[1]
                 result.object_group = obj[2]
             output.stat = "Success"
