@@ -33,7 +33,7 @@ The model has the following variables (leafs):
 10. 'Provisioned_date' (String): Date the UBVPN request was provisioned by NSO.
 11. 'EXAM_Case_Number' (String): Exam Case number for the request.
 12. 'User_IDs' (String): List of User IDs that are to be provisioned.
-13. 'Number_of_users' (int64): Generated from python. Number of users
+13. 'Number_of_users' (int64): Generated from python. Number of users.
 
 ### Instructions
 1. Clone this package (Object_group_cleaner) into your NSO server's or project's packages directory.
