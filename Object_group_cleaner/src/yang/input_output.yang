@@ -14,7 +14,6 @@ module input_output {
       leaf end_time { type string; }
       leaf run_time { type string; }
       list orphaned_object_groups {
-        leaf device { type string; }
         leaf og_type { type string; }
         leaf object_group { type string; }
       }
@@ -50,7 +49,6 @@ module input_output {
       leaf stat { type string; }
       leaf number_of_ogs_deleted { type uint32; }
       list deleted_object_groups {
-        leaf device { type string; }
         leaf og_type { type string; }
         leaf object_group { type string; }
       }
@@ -94,7 +92,6 @@ module input_output {
       leaf end_time { type string; }
       leaf run_time { type string; }
       list deleted_object_groups {
-        leaf device { type string; }
         leaf og_type { type string; }
         leaf object_group { type string; }
       }
