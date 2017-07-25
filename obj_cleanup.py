@@ -14,7 +14,7 @@ def flag_ogs_in_box_test(box):
     og_typ = []
     acl_list = []
     ret = {}
-    i = 0
+    #i = 0
     #Creating transaction and setting root to access NSO
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
@@ -24,13 +24,13 @@ def flag_ogs_in_box_test(box):
                 og_list.append(og.id)
                 og_typ.append(str(og))      #str(og) is the object group type
 
-        print "Total Number of OG's: %d" %len(og_list)
+        #print "Total Number of OG's: %d" %len(og_list)
         #Adding each access list's rules to a python list (temp_rul_list) and
         #then adding those lists as elements of another python list (acl_list)
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
             temp_rul_list = []
-            print "Access List #: %d" % i
-            i = i + 1
+            #print "Access List #: %d" % i
+            #i = i + 1
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
                 if "object-group" in rul.id:
                     temp_rul_list.append(rul.id)
@@ -39,9 +39,16 @@ def flag_ogs_in_box_test(box):
         print "DEBUG"
     #Iterating through both object group and object group type lists simultaneously
     for og, typ in zip(og_list, og_typ):
+        flag = 0
         for acl in acl_list:
             #flag indicates whether og was found in an access list
-            flag = banish(og, acl)
+
+            for rule in acl:
+                if og in rule:
+                    flag = 1
+                    break
+
+            #flag = banish(og, acl)
             #If found, continue to the next object group
             if flag:
                 break
@@ -92,12 +99,12 @@ if __name__ == "__main__":
     """
     Main code that is used to test functionality of algorithms.
     """
-    count = 0
+    #count = 0
     b = time.time()
     orphaned_ogs =  flag_ogs_in_box_test('svl-gem-ubvpn-gw1a.cisco.com')
     print orphaned_ogs
-    for key in orphaned_ogs:
-        count += len(orphaned_ogs[key])
-    print "# of OG's to remove: %d" %count
+    #for key in orphaned_ogs:
+        #count += len(orphaned_ogs[key])
+    #print "# of OG's to remove: %d" %count
     af = time.time()
     print af-b
