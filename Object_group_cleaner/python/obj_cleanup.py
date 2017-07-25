@@ -49,7 +49,8 @@ def search_and_destroy(box):
                 #Else, create key and append og
                 else:
                     ret[typ] = [og]
-                remove_ogs(box, typ, og, root)
+                del root.devices.device[box].config.asa__object_group[typ][og]
+                t.apply()
 
     return ret
 
