@@ -44,17 +44,17 @@ return ret
 ### Yang model
 The YANG model is the mapping brain behind the service. The YANG model defines what parameters will be used for the configuration. It also includes relevant service meta data and details for service operation.
 The model has the following variables (leafs):
-1. `Devices` (leafref path ``"/ncs:devices/ncs:device/ncs:name"):`` The ASAs to have the configuration applied to.
-2. `Name` (String): Unique service id for a partner UBVPN request. Pattern to follow: site_id-ubvpn .
-3. `Partner_site_code` (String): The partner code ex: bofa.
-address management.
-4. `Hub` (enumeration): Mandatory. The UBVPN the site is in. To be mapped to specific ASA device per theater for configuration in Python. Options: SJC, BGL, TYO, AER
-5. `Service_status` (enumeration): Current correct status of the service. THIS IS NOT THE NETWORK STATUS, this is wether or not the service is still 'suppose' to exist. Options: Provisioning, Active, Decommissioned.
-6. `Provisioned_date` (String): Date the UBVPN request was provisioned by NSO.
-7. `User_IDs` (String): List of User IDs that are to be provisioned.
-8. `Number_of_users` (int64): Generated from python. Number of users.
+1. `Devices` (String) The ASAs to have the configuration applied to.
+2. `start_time` (String): The time at which the tool was configured.
+3. `end_time` (String): The time at which tool finished its configuration.
+4. `run_time` (String): The total run time of the too to finish its configuration
+5. `og_type` (String): Type of object_group outputted that will be removed from the devices object group list. Enumeration of the type can be icmp_type, network, service, or user.
+6. `object_group` (String): Existing id of the object group being removed from the obejct group list.
+7. `number_of_ogs_deleted` (int64): Total number of object groups removed from the object group list.
+8. `stat` (int64): Generated from python. Number of object groups.
+9. `device_name` (string) Name of the device
 
-## Instructions on UI
+## Instructions
 1. Clone this package (Object_group_cleaner) into your NSO server's or project's packages directory.
 2. In your NSO's command line (ncs_cli -C), perform a packages reload.
 3. Now the package will appear in the modules menu as Object_group_cleaner in your NSO's native web UI.
