@@ -1,7 +1,7 @@
 import ncs
 import socket
 
-
+stat = ""
 
 def search_and_destroy(box):
     """
@@ -13,6 +13,7 @@ def search_and_destroy(box):
     og_typ = []
     acl_list = []
     ret = {}
+    empty = True
 
     #Creating transaction and setting root to access NSO
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
@@ -34,15 +35,21 @@ def search_and_destroy(box):
 
         #Iterating through both object group and object group type lists simultaneously
         for og, typ in zip(og_list, og_typ):
+            flag = 0
             for acl in acl_list:
                 #flag indicates whether og was found in an access list
-                flag = banish(og, acl)
+                for rule in acl:
+                    if og in rule:
+                        flag = 1
+                        break
                 #If found, continue to the next object group
                 if flag:
                     break
             #If not found in any of the access lists, delete from object group list
             #and add to dictionary
             if not flag:
+                if empty:
+                    empty = False
                 #If key has been created already, add og to key
                 if typ in ret.keys():
                     ret[typ].append(og)
@@ -51,7 +58,16 @@ def search_and_destroy(box):
                     ret[typ] = [og]
                 del root.devices.device[box].config.asa__object_group[typ][og]
 
-        t.apply()
+        try:
+            t.apply()
+            stat = "Success"
+        #Provides error message if there is a problem removing an OG
+        except:
+            stat = "Error Removing"
+
+        #Provides an error message if there are no object groups to be removed for a device
+        if empty:
+            stat = "No Object Groups to Remove"
     return ret
 
 
@@ -62,11 +78,12 @@ def flag_ogs_in_box_test(box):
     in any of the inputted device's access lists, organized by object group type.
     """
 
-    #Initializing python lists
+    #Initializing python lists and flags
     og_list = []
     og_typ = []
     acl_list = []
     ret = {}
+    empty = True
 
     #Creating transaction and setting root to access NSO
     with ncs.maapi.single_read_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
@@ -88,20 +105,31 @@ def flag_ogs_in_box_test(box):
 
     #Iterating through both object group and object group type lists simultaneously
     for og, typ in zip(og_list, og_typ):
+        #flag indicates whether og was found in an access list
+        flag = 0
         for acl in acl_list:
-            #flag indicates whether og was found in an access list
-            flag = banish(og, acl)
+            #Iterates through the rules of an acl list
+            for rule in acl:
+                if og in rule:
+                    flag = 1
+                    break
+            #flag = banish(og, acl)
             #If found, continue to the next object group
             if flag:
                 break
         #If not found in any of the access lists, add to the dictionary
         if not flag:
+            if empty:
+                empty = False
             #If key has been created already, add og to key
             if typ in ret.keys():
                 ret[typ].append(og)
             #Else, create key and append og
             else:
                 ret[typ] = [og]
+
+    if empty:
+        stat = "No Orphaned Object Groups"
 
     return ret
 
@@ -115,6 +143,18 @@ def banish(og, acl):
         if og in rule:
             return True
     return False
+
+def remove_ogs(box, og_id, og_type):
+    """
+    A function that removes the object group from the object group list using
+    the arguments passed: device name, object group name, and object group type.
+    """
+    with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
+        del root.devices.device[box].config.asa__object_group[og_type][og_id]
+        try:
+            t.apply()
+        except:
+            stat = "Error Removing"
 
 
 def no_ogs_error(box):

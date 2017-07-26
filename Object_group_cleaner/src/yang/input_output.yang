@@ -13,6 +13,8 @@ module input_output {
       leaf start_time { type string; }
       leaf end_time { type string; }
       leaf run_time { type string; }
+      leaf stat { type string; }
+      leaf number_of_orphaned_ogs { type uint32; }
       list orphaned_object_groups {
         leaf og_type { type string; }
         leaf object_group { type string; }
