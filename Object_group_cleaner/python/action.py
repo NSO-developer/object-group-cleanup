@@ -39,6 +39,9 @@ class ActionHandler(Action):
             output -- output node (maagic.Node)
         """
         #TODO determine logging standards
+
+        _ncs.dp.action_set_timeout(uinfo, 500)
+
         self.log.info(uinfo.addr)
         self.log.info(uinfo.usid)
         self.log.info(uinfo.username)

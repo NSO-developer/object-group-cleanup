@@ -1,5 +1,6 @@
 import ncs
 import socket
+import time
 
 
 
@@ -15,7 +16,7 @@ def search_and_destroy(box):
     ret = {}
 
     #Creating transaction and setting root to access NSO
-    with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
+    with ncs.maapi.single_read_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
         #Adding all of the object groups and their types to python lists
         for ogtyp in root.devices.device[box].config.asa__object_group:
@@ -69,7 +70,7 @@ def flag_ogs_in_box_test(box):
     ret = {}
 
     #Creating transaction and setting root to access NSO
-    with ncs.maapi.single_read_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
+    with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
         #Adding all of the object groups and their types to python lists
         for ogtyp in root.devices.device[box].config.asa__object_group:
@@ -82,8 +83,9 @@ def flag_ogs_in_box_test(box):
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
             temp_rul_list = []
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
-                if "object-group" in rul.id:
-                    temp_rul_list.append(rul.id)
+                #if "object-group" in rul.id:
+                temp_rul_list.append(rul.id)
+            print "Access List Length: %d" % len(temp_rul_list)
             acl_list.append(temp_rul_list)
 
     #Iterating through both object group and object group type lists simultaneously
@@ -122,3 +124,15 @@ def no_ogs_error(box):
     This function prints an error message if there are no object groups to be removed for a device.
     """
     print "Error: There are no object groups that need to be removed for device ",box,"."
+
+if __name__ == "__main__":
+    """
+    Main code that is used to test functionality of algorithms.
+    """
+
+    b = time.time()
+    orphaned_ogs =  flag_ogs_in_box_test('svl-gem-ubvpn-gw1a.cisco.com')
+    print orphaned_ogs
+
+    af = time.time()
+    print af-b
