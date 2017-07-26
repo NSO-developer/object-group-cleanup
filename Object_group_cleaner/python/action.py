@@ -58,6 +58,7 @@ class ActionHandler(Action):
                 og_for_removal = obj_cleanup.search_and_destroy(device)
                 for key in og_for_removal:
                     count += len(og_for_removal[key])
+                self.log.info(count)
                 for key, value in og_for_removal.items():
                     for og in value:
                         result = output.deleted_object_groups.create()
@@ -68,40 +69,29 @@ class ActionHandler(Action):
             output.stat = "Success"
 
         elif name == "search":
-            count = 0
             devices = helpers.build_device_list(input)
             #device = 'svl-gem-joe-asa-fw1.cisco.com'
             for device in devices:
                 og_for_removal = obj_cleanup.flag_ogs_in_box_test(device)
-                for key in og_for_removal:
-                    count += len(og_for_removal[key])
+                #og_for_removal = mock()
                 for key, value in og_for_removal.items():
                     for og in value:
                         result = output.orphaned_object_groups.create()
                         result.object_group = og
                         result.og_type = key
                         #result.device = device
-            output.number_of_orphaned_ogs = count
-            output.stat = "Success"
-
 
         elif name == "remove":
-            flag = 0
             obj_groups = helpers.build_og_list(input)
             for obj in obj_groups:
                 #obj[1] = "asa:" + obj[1]
                 self.log.info(obj[1])
-                stat = obj_cleanup.remove_ogs(obj[0], obj[1], obj[2])
-                if stat == "Error Removing":
-                    flag = 1
+                obj_cleanup.remove_ogs(obj[0], obj[1], obj[2])
                 result = output.deleted_object_groups.create()
                 #result.device = obj[0]
                 result.og_type = obj[1]
                 result.object_group = obj[2]
-            if flag:
-                output.stat = "Error Removing"
-            else:
-                output.stat = "Success"
+            output.stat = "Success"
 
 
         else:
