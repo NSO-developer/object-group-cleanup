@@ -1,7 +1,7 @@
 import ncs
 import socket
 
-stat
+
 
 def search_and_destroy(box):
     """
