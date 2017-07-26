@@ -40,7 +40,7 @@ class ActionHandler(Action):
         """
         #TODO determine logging standards
 
-        _ncs.dp.action_set_timeout(userInfo, 500)
+        _ncs.dp.action_set_timeout(uInfo, 500)
 
         self.log.info(uinfo.addr)
         self.log.info(uinfo.usid)
