@@ -130,6 +130,8 @@ def flag_ogs_in_box_test(box):
 
     if empty:
         stat = "No Orphaned Object Groups"
+    else:
+        stat = "Success"
 
     return ret
 
@@ -153,6 +155,7 @@ def remove_ogs(box, og_id, og_type):
         del root.devices.device[box].config.asa__object_group[og_type][og_id]
         try:
             t.apply()
+            stat = "Success"
         except:
             stat = "Error Removing"
 
