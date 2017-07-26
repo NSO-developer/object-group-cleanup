@@ -68,7 +68,7 @@ def search_and_destroy(box):
         #Provides an error message if there are no object groups to be removed for a device
         if empty:
             stat = "No Object Groups to Remove"
-    return ret
+    return ret, stat
 
 
 
@@ -133,7 +133,7 @@ def flag_ogs_in_box_test(box):
     else:
         stat = "Success"
 
-    return ret
+    return ret, stat
 
 def banish(og, acl):
     """
@@ -146,18 +146,24 @@ def banish(og, acl):
             return True
     return False
 
-def remove_ogs(box, og_id, og_type):
+def remove_ogs(obj_groups):
     """
     A function that removes the object group from the object group list using
     the arguments passed: device name, object group name, and object group type.
     """
     with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
+        root = ncs.maagic.get_root(t)
+
+        for obj in obj_groups:
+            
         del root.devices.device[box].config.asa__object_group[og_type][og_id]
         try:
             t.apply()
             stat = "Success"
         except:
             stat = "Error Removing"
+
+    return stat
 
 
 def no_ogs_error(box):
