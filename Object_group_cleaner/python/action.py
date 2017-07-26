@@ -101,7 +101,7 @@ class ActionHandler(Action):
             if flag:
                 output.stat = "Error Removing"
             else:
-                output.stat = "Sucess"
+                output.stat = "Success"
 
 
         else:
