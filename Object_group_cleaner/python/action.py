@@ -68,6 +68,7 @@ class ActionHandler(Action):
             output.stat = obj_cleanup.stat
 
         elif name == "search":
+            count = 0
             devices = helpers.build_device_list(input)
             #device = 'svl-gem-joe-asa-fw1.cisco.com'
             for device in devices:
