@@ -68,7 +68,7 @@ def search_and_destroy(box):
         #Provides an error message if there are no object groups to be removed for a device
         if empty:
             stat = "No Object Groups to Remove"
-    return ret, stat
+    return ret
 
 
 
@@ -133,7 +133,7 @@ def flag_ogs_in_box_test(box):
     else:
         stat = "Success"
 
-    return ret, stat
+    return ret
 
 def banish(og, acl):
     """
@@ -155,7 +155,7 @@ def remove_ogs(obj_groups):
         root = ncs.maagic.get_root(t)
 
         for obj in obj_groups:
-            
+
         del root.devices.device[box].config.asa__object_group[og_type][og_id]
         try:
             t.apply()

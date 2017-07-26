@@ -55,7 +55,7 @@ class ActionHandler(Action):
             count = 0
             devices = helpers.build_device_list(input)
             for device in devices:
-                og_for_removal, output.stat = obj_cleanup.search_and_destroy(device)
+                og_for_removal = obj_cleanup.search_and_destroy(device)
                 for key in og_for_removal:
                     count += len(og_for_removal[key])
                 for key, value in og_for_removal.items():
@@ -65,13 +65,14 @@ class ActionHandler(Action):
                         result.og_type = key
                         #result.device = device
             output.number_of_ogs_deleted = count
+            output.stat = "Success"
 
         elif name == "search":
             count = 0
             devices = helpers.build_device_list(input)
             #device = 'svl-gem-joe-asa-fw1.cisco.com'
             for device in devices:
-                og_for_removal, output.stat = obj_cleanup.flag_ogs_in_box_test(device)
+                og_for_removal = obj_cleanup.flag_ogs_in_box_test(device)
                 for key in og_for_removal:
                     count += len(og_for_removal[key])
                 for key, value in og_for_removal.items():
@@ -81,6 +82,7 @@ class ActionHandler(Action):
                         result.og_type = key
                         #result.device = device
             output.number_of_orphaned_ogs = count
+            output.stat = "Success"
 
 
         elif name == "remove":
