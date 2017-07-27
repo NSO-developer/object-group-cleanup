@@ -12,11 +12,11 @@ def flag_ogs_in_box_test(box):
     #Initializing python lists
     og_list = []
     og_typ = []
-    acl_list = []
+    rul_list = []
     ret = {}
 
     #Creating transaction and setting root to access NSO
-    with ncs.maapi.single_write_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
+    with ncs.maapi.single_read_trans('ncsadmin', 'python', groups=['ncsadmin']) as t:
         root = ncs.maagic.get_root(t)
         #Adding all of the object groups and their types to python lists
         for ogtyp in root.devices.device[box].config.asa__object_group:
@@ -28,41 +28,40 @@ def flag_ogs_in_box_test(box):
         #Adding each access list's rules to a python list (temp_rul_list) and
         #then adding those lists as elements of another python list (acl_list)
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
-            temp_rul_list = []
-            #print "Access List #: %d" % i
-            #i = i + 1
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
-                if "object-group" in rul.id:
-                    #temp_rul_list.append(rul.id)
-                    match = re.findall('object-group ([\w:*.*]+[-\w+*.*]*)', rul.id)
-                    for m in match:
-                        temp_rul_list.append(m)
-            acl_list.append(temp_rul_list)
+                match = re.findall('object-group ([\w:*.*]+[-\w+*.*]*)', rul.id)
+                for m in match:
+                    rul_list.append(m)
 
-        print "DEBUG"
-    #Iterating through both object group and object group type lists simultaneously
-    for og, typ in zip(og_list, og_typ):
-        flag = 0
-        for acl in acl_list:
-            #flag indicates whether og was found in an access list
+    og_list = set(og_list)
+    rul_list = set(rul_list)
 
-            for rule in acl:
-                if og in rule:
-                    flag = 1
-                    break
+    final  = og_list.difference(rul_list)
 
-            #flag = banish(og, acl)
-            #If found, continue to the next object group
-            if flag:
-                break
-        #If not found in any of the access lists, add to the dictionary
-        if not flag:
-            #If key has been created already, add og to key
-            if typ in ret.keys():
-                ret[typ].append(og)
-            #Else, create key and append og
-            else:
-                ret[typ] = [og]
+    print final
+    # #Iterating through both object group and object group type lists simultaneously
+    # for og, typ in zip(og_list, og_typ):
+    #     flag = 0
+    #     for acl in acl_list:
+    #         #flag indicates whether og was found in an access list
+    #
+    #         for rule in acl:
+    #             if og in rule:
+    #                 flag = 1
+    #                 break
+    #
+    #         #flag = banish(og, acl)
+    #         #If found, continue to the next object group
+    #         if flag:
+    #             break
+    #     #If not found in any of the access lists, add to the dictionary
+    #     if not flag:
+    #         #If key has been created already, add og to key
+    #         if typ in ret.keys():
+    #             ret[typ].append(og)
+    #         #Else, create key and append og
+    #         else:
+    #             ret[typ] = [og]
 
     return ret
 
