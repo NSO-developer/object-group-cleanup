@@ -29,6 +29,7 @@ def flag_ogs_in_box_test(box):
         #then adding those lists as elements of another python list (acl_list)
         for acl in root.devices.device[box].config.asa__access_list.access_list_id:
             for rul in root.devices.device[box].config.asa__access_list.access_list_id[acl.id].rule:
+                print rul.id
                 match = re.findall('object-group ([\w:*.*]+[-\w+*.*]*)', rul.id)
                 for m in match:
                     rul_list.append(m)
