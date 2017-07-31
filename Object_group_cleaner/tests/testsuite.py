@@ -8,7 +8,7 @@ class TestOGC(unittest.TestCase):
 
     def test_search_empty(self):
         """
-        This function tests if the device
+        This function tests if the device is returning the correct output from the Object_group_cleaner tool.
         """
         device_typ = "device"
         device_name = "asa-netsim-1"
@@ -19,6 +19,7 @@ class TestOGC(unittest.TestCase):
             new_obj = input1.inputs.create()
             new_obj.input_type = device_typ
             new_obj.value = device_name
+            #check output
 
     def test_seach_reg(self):
 
