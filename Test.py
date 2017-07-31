@@ -45,7 +45,7 @@ if __name__ == '__main__':
                 print 1
             else:
                 print 0
-
+            
             with m.start_write_trans() as t:
                 root = ncs.maagic.get_root(t)
                 for ogtyp in root.devices.device["asa-netsim-1"].config.asa__object_group:
