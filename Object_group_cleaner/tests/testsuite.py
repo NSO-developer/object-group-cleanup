@@ -20,6 +20,10 @@ class TestOGC(unittest.TestCase):
             new_obj.input_type = device_typ
             new_obj.value = device_name
 
+            root.devices.device["asa-netsim-1"].config.asa__access_list.access_list_id.create("access_list_0")
+            root.devices.device["asa-netsim-1"].config.asa__access_list.access_list_id.create("access_list_1")
+            root.devices.device["asa-netsim-1"].config.asa__access_list.access_list_id.create("access_list_2")
+
     def test_seach_reg(self):
 
     def test_perf(self):
