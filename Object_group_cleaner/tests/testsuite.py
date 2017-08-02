@@ -234,79 +234,79 @@ class TestOGC(unittest.TestCase):
     def test_remove(self):
         """
         """
-                orphaned_ogs = {}
-                empty_dict = []
-                og_list = []
+        orphaned_ogs = {}
+        empty_dict = []
+        og_list = []
 
-                with ncs.maapi.Maapi() as m:
-                    with ncs.maapi.Session(m, 'ncsadmin', 'python', groups=['ncsadmin']):
+        with ncs.maapi.Maapi() as m:
+            with ncs.maapi.Session(m, 'ncsadmin', 'python', groups=['ncsadmin']):
 
-                        with m.start_write_trans() as t:
-                            root = ncs.maagic.get_root(t)
+                with m.start_write_trans() as t:
+                    root = ncs.maagic.get_root(t)
 
-                            og = "test_og_"
+                    og = "test_og_"
 
-                            num_types = 0
-                            for ogtyp in root.devices.device[constants.device_name].config.asa__object_group:
-                                og_num = og + str(num_types) + '_'
-                                num_types = num_types + 1
-                                for j in range(20):
-                                    fake_og = og_num + str(j)
-                                    root.devices.device[constants.device_name].config.asa__object_group[ogtyp].create(fake_og)
+                    num_types = 0
+                    for ogtyp in root.devices.device[constants.device_name].config.asa__object_group:
+                        og_num = og + str(num_types) + '_'
+                        num_types = num_types + 1
+                        for j in range(20):
+                            fake_og = og_num + str(j)
+                            root.devices.device[constants.device_name].config.asa__object_group[ogtyp].create(fake_og)
 
-                            t.apply()
+                    t.apply()
 
-                        with m.start_write_trans() as t:
-                            root = ncs.maagic.get_root(t)
+                with m.start_write_trans() as t:
+                    root = ncs.maagic.get_root(t)
 
-                            holder = "access_list_"
-                            rul = "extended permit icmp object-group test_og_"
+                    holder = "access_list_"
+                    rul = "extended permit icmp object-group test_og_"
 
-                            for i in range(num_types):
-                                acl_num = holder + str(i)
-                                root.devices.device[constants.device_name].config.asa__access_list.access_list_id.create(acl_num)
-                                rul_num = rul + str(i) + '_'
-                                for j in range(0):
-                                    fake_rule = rul_num + str(j)
-                                    root.devices.device[constants.device_name].config.asa__access_list.access_list_id[acl_num].rule.create(fake_rule)
+                    for i in range(num_types):
+                        acl_num = holder + str(i)
+                        root.devices.device[constants.device_name].config.asa__access_list.access_list_id.create(acl_num)
+                        rul_num = rul + str(i) + '_'
+                        for j in range(0):
+                            fake_rule = rul_num + str(j)
+                            root.devices.device[constants.device_name].config.asa__access_list.access_list_id[acl_num].rule.create(fake_rule)
 
-                            t.apply()
+                    t.apply()
 
 
-                        with m.start_write_trans() as t:
+                with m.start_write_trans() as t:
 
-                            root = ncs.maagic.get_root(t)
-                            device = root.devices.device[constants.device_name]
-                            input1 = root.Object_group_cleaner.cleanup.get_input()
-                            new_obj = input1.inputs.create()
-                            new_obj.input_type = constants.device_typ
-                            new_obj.value = constants.device_name
+                    root = ncs.maagic.get_root(t)
+                    device = root.devices.device[constants.device_name]
+                    input1 = root.Object_group_cleaner.cleanup.get_input()
+                    new_obj = input1.inputs.create()
+                    new_obj.input_type = constants.device_typ
+                    new_obj.value = constants.device_name
 
-                            output1 = root.Object_group_cleaner.cleanup(input1)
+                    output1 = root.Object_group_cleaner.cleanup(input1)
 
-                            end_time = output1.end_time
-                            org_gps = output1.orphaned_object_groups
+                    end_time = output1.end_time
+                    org_gps = output1.orphaned_object_groups
 
-                            for ogtyp in root.devices.device[box].config.asa__object_group:
-                                for og in root.devices.device[box].config.asa__object_group[ogtyp]:
-                                    og_list.append(og.id)
+                    for ogtyp in root.devices.device[box].config.asa__object_group:
+                        for og in root.devices.device[box].config.asa__object_group[ogtyp]:
+                            og_list.append(og.id)
 
-                            self.assertEqual(og_list,empty_dict)
+                    self.assertEqual(og_list,empty_dict)
 
-                        with m.start_write_trans() as t:
-                            root = ncs.maagic.get_root(t)
-                            for ogtyp in root.devices.device["asa-netsim-1"].config.asa__object_group:
-                                for og in root.devices.device["asa-netsim-1"].config.asa__object_group[ogtyp]:
-                                    del root.devices.device["asa-netsim-1"].config.asa__object_group[ogtyp][og.id]
+                with m.start_write_trans() as t:
+                    root = ncs.maagic.get_root(t)
+                    for ogtyp in root.devices.device["asa-netsim-1"].config.asa__object_group:
+                        for og in root.devices.device["asa-netsim-1"].config.asa__object_group[ogtyp]:
+                            del root.devices.device["asa-netsim-1"].config.asa__object_group[ogtyp][og.id]
 
-                            t.apply()
+                    t.apply()
 
-                        with m.start_write_trans() as t:
-                            root = ncs.maagic.get_root(t)
-                            for acl in root.devices.device["asa-netsim-1"].config.asa__access_list.access_list_id:
-                                del root.devices.device["asa-netsim-1"].config.asa__access_list.access_list_id[acl.id]
+                with m.start_write_trans() as t:
+                    root = ncs.maagic.get_root(t)
+                    for acl in root.devices.device["asa-netsim-1"].config.asa__access_list.access_list_id:
+                        del root.devices.device["asa-netsim-1"].config.asa__access_list.access_list_id[acl.id]
 
-                            t.apply()
+                    t.apply()
 
 if __name__ == '__main__':
     unittest.main()
