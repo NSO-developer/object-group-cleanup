@@ -293,10 +293,13 @@ class TestOGC(unittest.TestCase):
 
                     output1 = root.Object_group_cleaner.cleanup(input1)
 
-                    end_time = output1.end_time
-                    number_of_ogs_deleted = output1.number_of_ogs_deleted
+                    #number_of_ogs_deleted = output1.deleted_object_groups
 
-                    self.assertEqual(number_of_ogs_deleted, 0)
+                    for ogtyp in root.devices.device[box].config.asa__object_group:
+                        for og in root.devices.device[box].config.asa__object_group[ogtyp]:
+                            og_list.append(og.id)
+
+                    self.assertEqual(og_list, empty_dict)
 
                 with m.start_write_trans() as t:
                     root = ncs.maagic.get_root(t)
