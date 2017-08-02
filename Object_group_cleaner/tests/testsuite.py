@@ -293,8 +293,8 @@ class TestOGC(unittest.TestCase):
 
                     output1 = root.Object_group_cleaner.cleanup(input1)
 
-                    for ogtyp in root.devices.device[device_name].config.asa__object_group:
-                        for og in root.devices.device[device_name].config.asa__object_group[ogtyp]:
+                    for ogtyp in root.devices.device[constants.device_name].config.asa__object_group:
+                        for og in root.devices.device[constants.device_name].config.asa__object_group[ogtyp]:
                             og_list.append(og.id)
 
                     self.assertEqual(og_list, empty_dict)
