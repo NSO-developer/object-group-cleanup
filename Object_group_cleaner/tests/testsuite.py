@@ -6,8 +6,13 @@ import time
 
 
 class TestOGC(unittest.TestCase):
-
+"""
+This program tests if the Object_group_cleaner tool is able to search all the object group list and checks if there are object groups that need to be deleted.
+"""
     def test_search_empty(self):
+        """
+        With this test case, we create a netsim such that none of the object groups need to be deteled. This test passes if no object groups are returned.
+        """
 
         orphaned_ogs = {}
         empty_dict = {}
@@ -83,9 +88,6 @@ class TestOGC(unittest.TestCase):
                         del root.devices.device["asa-netsim-1"].config.asa__access_list.access_list_id[acl.id]
 
                     t.apply()
-
-
-
 
     def test_seach_reg(self):
 
@@ -285,13 +287,9 @@ class TestOGC(unittest.TestCase):
                     output1 = root.Object_group_cleaner.cleanup(input1)
 
                     end_time = output1.end_time
-                    org_gps = output1.orphaned_object_groups
+                    number_of_ogs_deleted = output1.number_of_ogs_deleted
 
-                    for ogtyp in root.devices.device[box].config.asa__object_group:
-                        for og in root.devices.device[box].config.asa__object_group[ogtyp]:
-                            og_list.append(og.id)
-
-                    self.assertEqual(og_list,empty_dict)
+                    self.assertEqual(number_of_ogs_deleted, 0)
 
                 with m.start_write_trans() as t:
                     root = ncs.maagic.get_root(t)
