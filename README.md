@@ -77,7 +77,7 @@ create a session with NSO
 ![meme](https://s-media-cache-ak0.pinimg.com/originals/1a/0e/75/1a0e758c3fcf69cfc12754edf4439bb4.jpg)
 ---
 ### Project Team Members
-Brandon Black
+Brandon Black <br  />
 Divyani Rao <br  />
 Alyssa Sandore <br />
 Rob Gonzalez <br />
