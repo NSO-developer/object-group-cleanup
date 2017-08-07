@@ -61,8 +61,6 @@ The model has the following variables (leafs):
 4. Choose one of the three tools: cleanup, search, or remove. Each have description pop ups when you hover your mouse over them.
 5. Each of the above options will require device/device_group name, object_group type, and/or the object_group name as an additional input.
 
-### Postman
-
 ---
 ### Outline
 ```
@@ -73,8 +71,6 @@ create a session with NSO
         iterate through access list
            check if obj group is in the access list
 ```
----
-![meme](https://s-media-cache-ak0.pinimg.com/originals/1a/0e/75/1a0e758c3fcf69cfc12754edf4439bb4.jpg)
 ---
 ### Project Team Members
 Brandon Black <br  />
